@@ -2,4 +2,16 @@
     <string name="app_name">FitWithUs</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_again">Hello Again!</string>
+    <string name="welcome_back_you_ve_n_been_missed">Welcome back you\'ve \nbeen missed!</string>
+    <string name="email">Email</string>
+    <string name="enter_email">Enter email</string>
+    <string name="password">Password</string>
+    <string name="password_hint">* * * * * * * *</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="show_password">Show password</string>
+    <string name="log_in">Log In</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? <font color='#FFA500'>Sign Up</font></string>
+    <string name="or_continue_with">or Continue with</string>
+    <string name="log_in_with_google">Log In with Google</string>
 </resources>

@@ -52,4 +52,8 @@ dependencies {
     /*Dependencies for the navigation graph*/
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    /*Dependencies for the dimensions*/
+    implementation("com.intuit.sdp:sdp-android:1.1.0")
+    implementation("com.intuit.ssp:ssp-android:1.1.0")
 }
