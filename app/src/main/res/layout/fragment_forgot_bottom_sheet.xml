@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_15sdp">
+
+    <View
+        android:id="@+id/bottomOpener"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_7sdp"
+        android:background="@drawable/round_drawable"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!--  for password change layout  -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvNewPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="@string/new_password"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_11ssp"
+        app:fontFamily="@font/poppins_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomOpener" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newPasswordLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+        app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+        app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+        app:boxCornerRadiusTopStart="@dimen/_5sdp"
+        app:boxStrokeColor="@color/yellow_orange"
+        app:endIconMode="password_toggle"
+        app:errorContentDescription="@string/app_name"
+        app:errorEnabled="true"
+        android:saveEnabled="false"
+        app:errorTextColor="@android:color/holo_red_dark"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNewPassword">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newPassword"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_hint"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:textSize="@dimen/_13ssp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvConfirmPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:text="@string/confirm_password"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_11ssp"
+        app:fontFamily="@font/poppins_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPasswordLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+        app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+        app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+        app:boxCornerRadiusTopStart="@dimen/_5sdp"
+        app:boxStrokeColor="@color/yellow_orange"
+        app:endIconMode="password_toggle"
+        app:errorContentDescription="@string/app_name"
+        app:errorEnabled="true"
+        app:errorTextColor="@android:color/holo_red_dark"
+        app:hintEnabled="false"
+        android:saveEnabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/btnDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvConfirmPassword">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirmPassword"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:textSize="@dimen/_13ssp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!--    For email forgot password process-->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvEmailLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="@string/email"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_11ssp"
+        android:visibility="gone"
+        app:fontFamily="@font/poppins_medium"
+        app:layout_constraintBottom_toTopOf="@+id/forgotEmailLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomOpener" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/forgotEmailLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:visibility="gone"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+        app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+        app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+        app:boxCornerRadiusTopStart="@dimen/_5sdp"
+        app:boxStrokeColor="@color/yellow_orange"
+        app:errorContentDescription="@string/app_name"
+        app:errorEnabled="true"
+        app:errorTextColor="@android:color/holo_red_dark"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/btnDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/forgotEmail"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_email"
+            android:saveEnabled="false"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:textSize="@dimen/_13ssp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!-- for phone password process-->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvForgotPhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="@string/mobile_number"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_11ssp"
+        android:visibility="gone"
+        app:fontFamily="@font/poppins_medium"
+        app:layout_constraintBottom_toTopOf="@+id/forgotPhoneLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomOpener" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/forgotPhoneLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:visibility="gone"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+        app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+        app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+        app:boxCornerRadiusTopStart="@dimen/_5sdp"
+        android:saveEnabled="false"
+        app:boxStrokeColor="@color/yellow_orange"
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:errorContentDescription="@string/app_name"
+        app:errorEnabled="true"
+        app:errorTextColor="@android:color/holo_red_dark"
+        app:hintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/btnDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:prefixText="+91">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/forgotPhone"
+            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_mobile_number"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="10"
+            android:saveEnabled="false"
+            android:singleLine="true"
+            android:textSize="@dimen/_13ssp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- otp reader-->
+    <com.trishaft.fitwithus.otpReader.OtpReader
+        android:id="@+id/otpReader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_15sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btnDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomOpener" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:backgroundTint="@color/yellow_orange"
+        android:fontFamily="@font/poppins_bold"
+        android:paddingVertical="@dimen/_10sdp"
+        android:text="@string/send_otp"
+        android:textSize="@dimen/_11ssp"
+        app:cornerRadius="@dimen/_10sdp"
+        app:layout_constraintBottom_toTopOf="@+id/switchHandler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/switchHandler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/infoMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tryMoreMethods"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/try_mobile"
+            android:textColor="@color/yellow_orange"
+            android:textSize="@dimen/_11ssp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tryWithEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/try_email"
+            android:textColor="@color/yellow_orange"
+            android:textSize="@dimen/_11ssp"
+            android:visibility="gone" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/requestOtpAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/not_receive_otp"
+            android:textColor="@color/yellow_orange"
+            android:textSize="@dimen/_11ssp"
+            android:visibility="gone" />
+    </RadioGroup>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/infoMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="@string/not_close"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchHandler"
+
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

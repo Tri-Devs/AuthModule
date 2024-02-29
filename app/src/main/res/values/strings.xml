@@ -3,7 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_again">Hello Again!</string>
-    <string name="welcome_back_you_ve_n_been_missed">Welcome back you\'ve \nbeen missed!</string>
+    <string name="welcome_back_you_ve_n_been_missed">Elevate Your Wellness Journey with Our All-in-One Fitness Health App. Your Path to a Stronger, Healthier You Starts Here!</string>
+    <string name="welcome_back">Boost Your Wellness Adventure with Our Complete Fitness Health Application. Embark on Your Journey to a Fitter, Healthier You Today and Take Your Fitness Goals to New Heights!</string>
     <string name="email">Email</string>
     <string name="enter_email">Enter email</string>
     <string name="password">Password</string>
@@ -11,7 +12,39 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="show_password">Show password</string>
     <string name="log_in">Log In</string>
-    <string name="don_t_have_an_account_sign_up">Don\'t have an account? <font color='#FFA500'>Sign Up</font></string>
+    <string name="don_t_have_an_account_sign_up">Did\'t have an account? <font color='#FFA500'>Sign Up</font></string>
+    <string name="have_an_accoun">Already have an account? <font color='#FFA500'>Login</font></string>
+    <string name="not_receive_otp">Did\'t get the OTP? <font color="#FFA500">Resend SMS</font></string>
     <string name="or_continue_with">or Continue with</string>
     <string name="log_in_with_google">Log In with Google</string>
+    <string name="biometric_button">Biometric Button</string>
+    <string name="later_implementation">Need to be implemented later on</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="send_otp">Send Otp</string>
+    <string name="valid_mobile_number">Mobile number should be 10 digit long</string>
+    <string name="enter_otp">Enter Otp</string>
+    <string name="otp_verification">OTP Verification</string>
+    <string name="we_have_sent_a_verification_code_to">We have sent a verification code to</string>
+    <string name="dummy_number">+91-9098989099</string>
+    <string name="try_methods">Try more login methods</string>
+    <string name="dummy_char">0</string>
+    <string name="try_mobile">Try with Mobile number</string>
+    <string name="try_email">Try with Email Address</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="invalid_email_address">Invalid email address</string>
+    <string name="mobile_number_should_contain_10_digits">Mobile Number should contain 10 digits</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="change_password">Change Password</string>
+    <string name="mobile_verification">Mobile Verification</string>
+    <string name="not_close">Please don\'t press the back button or close the app.</string>
+    <string name="signUp">Sign Up</string>
+    <string name="create_account">Create Account</string>
+    <string name="first_name">Name</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="fill_your_information">Fill your information bellow or register with your social account</string>
+    <string name="agree_with_terms_condition">Agree with  <font color='#FFA500'>Terms &amp; Condition</font></string>
+    <string name="remember_password">Remember Password</string>
+    <string name="signUp_with">Or sign up with</string>
 </resources>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -13,8 +13,11 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_loginFragment_to_phoneLoginFragment"
+            app:destination="@id/phoneLoginFragment"
+           />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -26,10 +29,54 @@
             app:destination="@id/createAccountFragment"
             app:popUpTo="@id/signUpFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="com.trishaft.fitwithus.screens.createAccount.CreateAccountFragment"
         android:label="fragment_create_account"
         tools:layout="@layout/fragment_create_account" />
+    <fragment
+        android:id="@+id/phoneLoginFragment"
+        android:name="com.trishaft.fitwithus.screens.login.PhoneLoginFragment"
+        android:label="fragment_phone_login"
+        tools:layout="@layout/fragment_phone_login" >
+        <action
+            android:id="@+id/action_phoneLoginFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_phoneLoginFragment_to_otpVerificationScreen"
+            app:destination="@id/otpVerificationScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpVerificationScreen"
+        android:name="com.trishaft.fitwithus.screens.login.OtpVerificationScreen"
+        android:label="fragment_otp_verification_screen"
+        tools:layout="@layout/fragment_otp_verification_screen" >
+        <action
+            android:id="@+id/action_otpVerificationScreen_to_phoneLoginFragment"
+            app:destination="@id/phoneLoginFragment"
+            app:popUpTo="@id/phoneLoginFragment" />
+        <action
+            android:id="@+id/action_otpVerificationScreen_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.trishaft.fitwithus.screens.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment" />
+    </fragment>
 </navigation>

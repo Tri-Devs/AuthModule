@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -33,6 +35,7 @@ android {
 
     buildFeatures{
         viewBinding = true
+        dataBinding = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -56,4 +59,10 @@ dependencies {
     /*Dependencies for the dimensions*/
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
+
+   /*implementation of the firebase dependencies*/
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-analytics:21.5.1")
+    implementation("com.google.firebase:firebase-crashlytics:18.6.2")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
 }

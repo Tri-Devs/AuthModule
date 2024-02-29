@@ -1,9 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.FitWithUs" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- make the color  -->
+        <item name="colorPrimary">@color/yellow_orange</item>
+        <item name="colorPrimaryDark">@color/yellow_orange</item>
+        <item name="colorAccent">@color/yellow_orange</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="cursorColor">@color/yellow_orange</item>
+        <item name="android:textColorHighlight">@color/yellow_orange</item>
+
     </style>
+
+
+
 
     <style name="Theme.FitWithUs" parent="Base.Theme.FitWithUs" />
 </resources>
