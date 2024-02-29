@@ -10,7 +10,7 @@
     <string name="password">Password</string>
     <string name="password_hint">* * * * * * * *</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="show_password">Show password</string>
+    <string name="remember_me">Remember me</string>
     <string name="log_in">Log In</string>
     <string name="don_t_have_an_account_sign_up">Did\'t have an account? <font color='#FFA500'>Sign Up</font></string>
     <string name="have_an_accoun">Already have an account? <font color='#FFA500'>Login</font></string>
