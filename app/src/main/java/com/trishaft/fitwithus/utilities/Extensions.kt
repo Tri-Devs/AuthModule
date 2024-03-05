@@ -1,13 +1,21 @@
 package com.trishaft.fitwithus.utilities
 
+import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.trishaft.fitwithus.R
+import com.trishaft.fitwithus.databinding.CustomDialogEmailBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 fun String.debugLogs(tag: String) {
     Log.e(tag, "debugLogs: $this")
@@ -54,6 +62,51 @@ fun View.closeKeyboard() {
     imm.hideSoftInputFromWindow(this.windowToken, 0)
 }
 
+
+fun View.startFadeAnimation() {
+
+}
+
+inline fun Fragment.startOnBackGroundThread(crossinline googleSignInTask: () -> Unit) {
+    CoroutineScope(Dispatchers.IO).launch { googleSignInTask() }
+}
+
+inline fun Fragment.startOnMainThread(crossinline launchOnMainThread: () -> Unit) {
+    CoroutineScope(Dispatchers.Main).launch { launchOnMainThread() }
+}
+
 fun Fragment.navigate(action: Int) {
     findNavController().navigate(action)
+}
+
+
+fun String.showDialog(context: Context) {
+    val alertDialog = AlertDialog.Builder(context).apply {
+        setCancelable(true)
+        setMessage(this@showDialog)
+        setIcon(R.drawable.logo)
+    }.show()
+
+}
+
+fun Context.showCustomDialog(
+    layoutInflater: LayoutInflater,
+    emailAccount: String,
+    positiveButtonName: String,
+    negativeButtonName: String,
+    negativeButtonBlock: () -> Unit,
+    positiveButtonBlock: () -> Unit
+) {
+    val customDialog = Dialog(this, R.style.dialogBackground)
+    val binding = CustomDialogEmailBinding.inflate(layoutInflater)
+    customDialog.setContentView(binding.root)
+    binding.apply {
+        this@showCustomDialog.getString(R.string.do_you_want_to_go_with_this_email_id, emailAccount).also { emailString.text = it }
+        positiveButton.text = positiveButtonName
+        negativeButton.text = negativeButtonName
+        cancelButton.setOnClickListener { customDialog.dismiss() }
+        positiveButton.setOnClickListener { positiveButtonBlock(); customDialog.dismiss() }
+        negativeButton.setOnClickListener { negativeButtonBlock(); customDialog.dismiss() }
+    }
+    customDialog.show()
 }

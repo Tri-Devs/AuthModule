@@ -12,7 +12,20 @@
           "package_name": "com.trishaft.fitwithus"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "815449361012-u4d0kab8tftqnk81b3mkcrt5f64eejc7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trishaft.fitwithus",
+            "certificate_hash": "356e32247a95066c3d85066fd091421f9afca12d"
+          }
+        },
+        {
+          "client_id": "815449361012-teuagkngfk12ea3fskspbvf92ffve31k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyByD_Gpn0M6daaZvC4sgL5zSl1he_abahA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815449361012-teuagkngfk12ea3fskspbvf92ffve31k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

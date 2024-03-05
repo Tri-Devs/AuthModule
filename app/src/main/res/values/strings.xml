@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">FitWithUs</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -47,4 +47,13 @@
     <string name="agree_with_terms_condition">Agree with  <font color='#FFA500'>Terms &amp; Condition</font></string>
     <string name="remember_password">Remember Password</string>
     <string name="signUp_with">Or sign up with</string>
+    <string name="dummy_email">shubham@gmail.com</string>
+    <string name="choose_other_account">Choose login account</string>
+    <string name="cancel">Cancel</string>
+    <string name="do_you_want_to_go_with_this_email_id">Are you sure you want to login with <b><font color ="#FFA500">%1$s</font></b> email account?</string>
+    <string name="confirm">Confirm</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="change_account" tools:ignore="ExtraTranslation">Change Account</string>
+    <string name="continue_with" tools:ignore="ExtraTranslation">Continue</string>
 </resources>
