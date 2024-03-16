@@ -19,15 +19,24 @@ class FitWithUsApplication : Application() {
     }
 
     companion object {
+
+        private var instance: FitWithUsApplication? = null
         private var firebaseAuth: FirebaseAuth? = null
+
+
+        fun getApplicationClassInstance(): FitWithUsApplication {
+            return instance ?: synchronized(this) {
+                FitWithUsApplication().also { instance = it }
+            }
+        }
 
         fun getFirebaseAuthInstance(): FirebaseAuth {
             return firebaseAuth ?: Firebase.auth.also { firebaseAuth = it }
         }
 
+
         fun noImplementationLog(context: Context) {
-            context.getString(R.string.later_implementation)
-                .debugLogs(javaClass::class.java.simpleName)
+            context.getString(R.string.later_implementation).debugLogs(javaClass.simpleName)
         }
 
     }

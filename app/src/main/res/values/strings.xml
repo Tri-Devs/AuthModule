@@ -14,7 +14,7 @@
     <string name="log_in">Log In</string>
     <string name="don_t_have_an_account_sign_up">Did\'t have an account? <font color='#FFA500'>Sign Up</font></string>
     <string name="have_an_accoun">Already have an account? <font color='#FFA500'>Login</font></string>
-    <string name="not_receive_otp">Did\'t get the OTP? <font color="#FFA500">Resend SMS</font></string>
+    <string name="not_receive_otp">Did\'t get the OTP? <font color="#FFA500">Resend OTP</font></string>
     <string name="or_continue_with">or Continue with</string>
     <string name="log_in_with_google">Log In with Google</string>
     <string name="biometric_button">Biometric Button</string>
@@ -59,4 +59,7 @@
     <string name="empty_email_msg">Please Enter Email Address.</string>
     <string name="empty_pass">Please Enter the password.</string>
     <string name="password_length">Password must be of atleast 6 character.</string>
+    <string name="otp_for_password_change">Otp For Password Change for FitWithUs</string>
+    <string name="hi_your_otp_is_for_this_session">Hi %1$s , your Otp is %2$s for this session once the session end you need to generate the new otp. here session refer until you close the app.</string>
+    <string name="wait_for_20_second_resend_otp">Wait for %1$s second? Resend OTP</string>
 </resources>

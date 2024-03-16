@@ -30,6 +30,10 @@ android {
             )
         }
     }
+    packagingOptions {
+        pickFirst("META-INF/NOTICE.md")
+        pickFirst("META-INF/LICENSE.md")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -68,12 +72,21 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:21.5.1")
     implementation("com.google.firebase:firebase-crashlytics:18.6.2")
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-config")
+
 
 
     /* implementation for the credential manager in android*/
     implementation ("com.google.android.gms:play-services-auth:21.0.0")
 
     implementation ("androidx.browser:browser:1.3.0")
+
+    /*
+    * java mail dependencies
+    * */
+    implementation("com.sun.mail:android-mail:1.6.7")
+    implementation("com.sun.mail:android-activation:1.6.7")
+
 
 
 }

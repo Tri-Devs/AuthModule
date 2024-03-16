@@ -69,8 +69,8 @@ class EmailAuthenticationManager {
         password: String,
         listener: AuthenticationCallback
     ) {
-        "$email".debugLogs("logger")
-        "$password".debugLogs("logger")
+        email.debugLogs("logger")
+        password.debugLogs("logger")
 
         FitWithUsApplication.getFirebaseAuthInstance()
             .signInWithEmailAndPassword(email, password)

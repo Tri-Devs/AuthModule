@@ -11,7 +11,7 @@ class AuthRepo {
 
     companion object {
         private var repoInstance: AuthRepo? = null
-        fun getInstance() = repoInstance ?: AuthRepo()
+        fun getInstance() = repoInstance ?: AuthRepo().also { repoInstance = it }
     }
 
     private var emailAuthManager: EmailAuthenticationManager? = null

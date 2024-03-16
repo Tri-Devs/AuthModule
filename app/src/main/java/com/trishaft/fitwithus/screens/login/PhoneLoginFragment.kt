@@ -66,11 +66,11 @@ class PhoneLoginFragment : Fragment(), IPhoneAuthenticatorCallbacks {
                 it.toString().isValidMobileNumber { res ->
                     if (!res) {
                         etlMobile.error = requireContext().getString(R.string.valid_mobile_number)
-                        btnShareOtp.toggleState(false)
+                        btnShareOtp.toggleState(false , null)
                         return@isValidMobileNumber
                     }
                     etlMobile.error = null
-                    btnShareOtp.toggleState(true)
+                    btnShareOtp.toggleState(true,null)
 
                 }
             }
