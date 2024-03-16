@@ -14,7 +14,7 @@ class GoogleAuthenticationManager {
 
     companion object {
         private var instance: GoogleAuthenticationManager? = null
-        fun getTheGoogleInstance(context: Context): GoogleAuthenticationManager {
+        fun getTheGoogleInstance(): GoogleAuthenticationManager {
             return instance ?: GoogleAuthenticationManager().also { instance = it }
         }
     }
@@ -37,7 +37,6 @@ class GoogleAuthenticationManager {
     fun showTheGoogleSignInToUser(activity: Activity): Intent {
         val mGoogleSignInClient = GoogleSignIn.getClient(activity, setUpGoogleSignUpProperties());
         return mGoogleSignInClient.signInIntent
-
     }
 
     fun removeOrChangeGoogleAccount(activity: Activity) {

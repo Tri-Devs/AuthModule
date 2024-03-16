@@ -11,29 +11,26 @@ import com.trishaft.fitwithus.R
 class FitWithUsApplication : Application() {
 
 
-
     /*
     * if require the context at that place where it is not avialble
     * */
-     fun getInstance(): Context {
+    fun getInstance(): Context {
         return applicationContext
     }
-    companion object{
-        private var firebaseAuth:FirebaseAuth? = null
 
-        fun getFirebaseAuthInstance() : FirebaseAuth{
-            return firebaseAuth?: Firebase.auth.also {  firebaseAuth = it }
+    companion object {
+        private var firebaseAuth: FirebaseAuth? = null
+
+        fun getFirebaseAuthInstance(): FirebaseAuth {
+            return firebaseAuth ?: Firebase.auth.also { firebaseAuth = it }
         }
 
-        fun noImplementationLog(context: Context){
-             context.getString(R.string.later_implementation).debugLogs(javaClass::class.java.simpleName)
+        fun noImplementationLog(context: Context) {
+            context.getString(R.string.later_implementation)
+                .debugLogs(javaClass::class.java.simpleName)
         }
 
     }
-
-
-
-
 
 
     override fun onCreate() {

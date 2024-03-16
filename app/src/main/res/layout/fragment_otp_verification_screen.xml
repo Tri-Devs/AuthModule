@@ -101,4 +101,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:trackColor="@color/black"
+        app:trackThickness="8dp"
+        android:elevation="@dimen/_5sdp"
+        app:indicatorColor="@color/white"
+        app:indicatorDirectionCircular="clockwise"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorSize="@dimen/_20sdp"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

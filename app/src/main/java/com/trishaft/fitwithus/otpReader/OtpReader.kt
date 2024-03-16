@@ -65,9 +65,6 @@ class OtpReader : LinearLayout {
 
 
 
-
-
-
         pin1?.doAfterTextChanged { pin -> updateString(pin1, pin2, pin, 0) }
         pin2?.doAfterTextChanged { pin -> updateString(pin1, pin3, pin, 1) }
         pin3?.doAfterTextChanged { pin -> updateString(pin2, pin4, pin, 2) }
@@ -88,10 +85,13 @@ class OtpReader : LinearLayout {
         } else {
             nextView?.requestFocus()
         }
-        userEnteredOtp.add(index, editable.toString())
+        userEnteredOtp[index] = editable.toString()
         val convertedString = convertListToString(userEnteredOtp)
         if (isLastBit) {
-            if (convertedString.second) listener?.userEnteredOtp(convertedString.first)
+            if (convertedString.second) {
+                listener?.userEnteredOtp(convertedString.first)
+                listener?.verifyOtp(convertedString.first)
+            }
             else listener?.invalidOtp("user has not entered the whole Otp ", convertedString.first)
         } else {
             listener?.userEnteredOtp(convertedString.first)

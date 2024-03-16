@@ -245,6 +245,8 @@
         android:fontFamily="@font/poppins_bold"
         android:paddingVertical="@dimen/_10sdp"
         android:text="@string/send_otp"
+        android:alpha="0.5"
+        android:textColor="@color/white"
         android:textSize="@dimen/_11ssp"
         app:cornerRadius="@dimen/_10sdp"
         app:layout_constraintBottom_toTopOf="@+id/switchHandler"

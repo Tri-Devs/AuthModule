@@ -2,6 +2,8 @@ package com.trishaft.fitwithus.screens.login
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +11,30 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseUser
 import com.trishaft.fitwithus.R
+import com.trishaft.fitwithus.activities.MainActivity
+import com.trishaft.fitwithus.communicators.AuthenticationCallback
 import com.trishaft.fitwithus.databinding.FragmentForgotBottomSheetBinding
 import com.trishaft.fitwithus.databinding.FragmentLoginBinding
 import com.trishaft.fitwithus.firebase.GoogleAuthenticationManager
+import com.trishaft.fitwithus.screens.signUp.SignUpFragment
+import com.trishaft.fitwithus.screens.signUp.performSingleClick
+import com.trishaft.fitwithus.screens.signUp.toggleState
+import com.trishaft.fitwithus.screens.signUp.validate
+import com.trishaft.fitwithus.screens.signUp.validateEmail
+import com.trishaft.fitwithus.screens.signUp.validatePassword
 import com.trishaft.fitwithus.utilities.SnackBarManager
 import com.trishaft.fitwithus.utilities.closeKeyboard
 import com.trishaft.fitwithus.utilities.debugLogs
+import com.trishaft.fitwithus.utilities.enableDisableScreen
 import com.trishaft.fitwithus.utilities.isValidEmail
 import com.trishaft.fitwithus.utilities.isValidMobileNumber
 import com.trishaft.fitwithus.utilities.navigate
@@ -27,10 +43,18 @@ import com.trishaft.fitwithus.utilities.startOnBackGroundThread
 import com.trishaft.fitwithus.utilities.startOnMainThread
 
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment() , AuthenticationCallback{
 
     private val binding: FragmentLoginBinding by lazy {
         FragmentLoginBinding.inflate(layoutInflater)
+    }
+
+    private val loginViewModel:LoginViewModel by lazy{
+        ViewModelProvider(this)[LoginViewModel::class.java]
+    }
+
+    private val handler:Handler by lazy {
+        Handler(Looper.getMainLooper())
     }
 
     private var googleInstance : GoogleAuthenticationManager? = null
@@ -60,11 +84,8 @@ class LoginFragment : Fragment() {
             signUpNavigation.setOnClickListener { navigate(R.id.action_loginFragment_to_signUpFragment) }
             btnLogin.setOnClickListener {
                 root.closeKeyboard()
-                SnackBarManager.getInstance().showSnackBar(
-                    root,
-                    BaseTransientBottomBar.LENGTH_LONG,
-                    getString(R.string.invalid_email_address)
-                )
+                performSignIn()
+
             }
             btnMobile.setOnClickListener { navigate(R.id.action_loginFragment_to_phoneLoginFragment) }
 
@@ -84,10 +105,22 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun performSignIn() {
+        binding.btnLogin.performSingleClick(handler){
+            enableDisableOperation(true)
+            loginViewModel.doEmailSignIn(
+                binding.etEmail.text?.trim().toString(),
+                binding.etPassword.text?.trim().toString(),
+                this
+            )
+        }
+
+    }
+
 
     private fun handleGoogleClickListener() {
         startOnBackGroundThread{
-            googleInstance = GoogleAuthenticationManager.getTheGoogleInstance(requireContext())
+            googleInstance = GoogleAuthenticationManager.getTheGoogleInstance()
              isAlreadySessionHere = googleInstance?.checkWhetherUserHasAlreadyLoginTheAccount(requireContext())
             if (isAlreadySessionHere == null) {
                 googleSignInLauncher.launch(googleInstance?.showTheGoogleSignInToUser(requireActivity()))
@@ -119,12 +152,22 @@ class LoginFragment : Fragment() {
             * Applied the validation on email field
             * Password validation is not applied because on login it is not appropriate to show password validations.
             * */
-            etEmail.doAfterTextChanged {
-                if (it.toString().isValidEmail()) {
-                    etlEmail.error = null // Clear error if email is valid
-                } else {
-                    etlEmail.error = getString(R.string.invalid_email_address)
+
+
+            binding.apply {
+                etEmail.doAfterTextChanged {
+                    etEmail.validateEmail(requireContext(), etlEmail, btnLogin) {
+                        btnLogin.validate(requireContext(), etEmail, etPassword)
+                    }
                 }
+
+                etPassword.doAfterTextChanged {
+                    etPassword.validatePassword(requireContext(), etlPassword, btnLogin) {
+                        btnLogin.validate(requireContext(), etEmail, etPassword)
+                    }
+                }
+
+
             }
 
         }
@@ -166,10 +209,14 @@ class LoginFragment : Fragment() {
         bBinding?.apply {
             bottomViewsVisibility(View.VISIBLE, View.GONE, View.GONE)
             forgotEmail.doAfterTextChanged {
-                if (it.toString().isValidEmail()) {
-                    forgotEmailLayout.error = null // Clear error if email is valid
-                } else {
-                    forgotEmailLayout.error = getString(R.string.invalid_email_address)
+                it.toString().isValidEmail {res->
+                    if(!res){
+                        forgotEmailLayout.error = requireContext().getString(R.string.invalid_email_address)
+                        btnDone.toggleState(false)
+                        return@isValidEmail
+                    }
+                    forgotEmailLayout.error = null
+                    btnDone.toggleState(true)
                 }
             }
             btnDone.setOnClickListener {
@@ -202,12 +249,16 @@ class LoginFragment : Fragment() {
         bBinding?.apply {
             bottomViewsVisibility(View.GONE, View.VISIBLE, View.GONE)
             forgotPhone.doAfterTextChanged {
-                if (it.toString().isValidMobileNumber()) {
-                    forgotPhoneLayout.error = null // Clear error if email is valid
-                } else {
-                    forgotPhoneLayout.error =
-                        getString(R.string.mobile_number_should_contain_10_digits)
+                it.toString().isValidMobileNumber() {res->
+                    if(!res){
+                        btnDone.toggleState(false)
+                        forgotPhoneLayout.error = requireContext().getString(R.string.valid_mobile_number)
+                        return@isValidMobileNumber
+                    }
+                    forgotPhoneLayout.error = null
+                    btnDone.toggleState(true)
                 }
+
             }
             tryWithEmail.setOnClickListener { bottomSheetForEmailSetup() }
         }
@@ -251,4 +302,40 @@ class LoginFragment : Fragment() {
                 result.data?.data?.userInfo?.debugLogs(javaClass.simpleName)
             }
         }
+
+    private fun enableDisableOperation(enableDisable: Boolean) {
+        MainActivity.getInstance().window.enableDisableScreen(enableDisable)
+        binding.progressBar.enableDisableScreen(enableDisable)
+    }
+
+    override fun onSuccessfulAuthorization(user: FirebaseUser?) {
+        "onSuccess ${user?.displayName}".debugLogs(javaClass.name)
+        "onSuccess ${user?.email}".debugLogs(javaClass.name)
+//        enableDisableOperation(false)
+        enableDisableOperation(false)
+        SnackBarManager.getInstance().showSnackBar(
+            MainActivity.getBinding().root,
+            Snackbar.LENGTH_SHORT,
+            "Login Successful"
+        ).toString()
+    }
+
+    override fun onFailedAuthorization(error: String) {
+        "onFailure $error".debugLogs(javaClass.name)
+        SnackBarManager.getInstance()
+            .showSnackBar(MainActivity.getBinding().root, Snackbar.LENGTH_SHORT, error).toString()
+        enableDisableOperation(false)
+    }
+
+    override fun onAuthorizationCanceled() {
+        SnackBarManager.getInstance().showSnackBar(
+            MainActivity.getBinding().root,
+            Snackbar.LENGTH_SHORT,
+            "operation canceled"
+        ).toString()
+    }
+
+    override fun onAuthorizationComplete(task: Task<AuthResult>) {
+        "onAuth Complete $task".debugLogs(javaClass.name)
+    }
 }

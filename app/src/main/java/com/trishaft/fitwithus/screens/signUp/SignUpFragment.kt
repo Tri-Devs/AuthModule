@@ -1,60 +1,210 @@
 package com.trishaft.fitwithus.screens.signUp
 
+import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseUser
 import com.trishaft.fitwithus.R
+import com.trishaft.fitwithus.activities.MainActivity
+import com.trishaft.fitwithus.communicators.AuthenticationCallback
+import com.trishaft.fitwithus.databinding.FragmentSignUpBinding
+import com.trishaft.fitwithus.firebase.GoogleAuthenticationManager
+import com.trishaft.fitwithus.utilities.SnackBarManager
+import com.trishaft.fitwithus.utilities.debugLogs
+import com.trishaft.fitwithus.utilities.enableDisableScreen
+import com.trishaft.fitwithus.utilities.navigate
+import com.trishaft.fitwithus.utilities.showCustomDialog
+import com.trishaft.fitwithus.utilities.startOnBackGroundThread
+import com.trishaft.fitwithus.utilities.startOnMainThread
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SignUpFragment : Fragment(), AuthenticationCallback {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val binding: FragmentSignUpBinding by lazy {
+        FragmentSignUpBinding.inflate(layoutInflater)
     }
+
+    private val signUpViewModel:SignUpViewModel by lazy {
+        ViewModelProvider(this)[SignUpViewModel::class.java]
+    }
+
+    private lateinit var handler: Handler
+
+    private var googleInstance : GoogleAuthenticationManager? = null
+    private var isAlreadySessionHere : GoogleSignInAccount? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        "onCreateView callback".debugLogs(javaClass.simpleName)
+        handler = Handler(Looper.getMainLooper())
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        "onViewCreated callback".debugLogs(javaClass.simpleName)
+        setTextChangedListeners()
+        setListeners()
+    }
+
+    private fun setTextChangedListeners() {
+        binding.apply {
+            etEmail.doAfterTextChanged {
+                etEmail.validateEmail(requireContext(), etlEmail, btnSignUp) {
+                    btnSignUp.validate(requireContext(), etEmail, etPassword)
                 }
             }
+
+            etPassword.doAfterTextChanged {
+                etPassword.validatePassword(requireContext(), etlPassword, btnSignUp) {
+                    btnSignUp.validate(requireContext(), etEmail, etPassword)
+                }
+            }
+        }
     }
+
+    private fun setListeners() {
+        binding.apply {
+            btnSignUp.setOnClickListener { performSignUp() }
+            btnGoogle.setOnClickListener { performGoogleSignIn() }
+            btnMobile.setOnClickListener { performPhoneAuthentication() }
+            signUpNavigation.setOnClickListener { navigate(R.id.action_signUpFragment_to_loginFragment) }
+            rememberMe.setOnCheckedChangeListener { compoundButton, switchState ->
+                saveLastLoginProfile(compoundButton, switchState)
+            }
+        }
+    }
+
+    private fun saveLastLoginProfile(compoundButton: CompoundButton?, switchState: Boolean) {
+
+    }
+
+    private fun performPhoneAuthentication() {
+        binding.btnMobile.performSingleClick(handler) {
+            navigate(R.id.action_signUpFragment_to_phoneLoginFragment)
+        }
+    }
+
+    private fun performGoogleSignIn() {
+        binding.btnGoogle.performSingleClick(handler) {
+            handleGoogleClickListener()
+        }
+    }
+
+
+
+    private fun performSignUp() {
+        binding.btnSignUp.performSingleClick(handler) {
+            enableDisableOperation(true)
+            doSignUp()
+        }
+    }
+
+
+    private fun doSignUp() {
+        signUpViewModel.doEmailSignUp(
+            binding.etEmail.text?.trim().toString(),
+            binding.etPassword.text?.trim().toString(), this
+        )
+    }
+
+    private fun enableDisableOperation(enableDisable: Boolean) {
+        MainActivity.getInstance().window.enableDisableScreen(enableDisable)
+        binding.progressBar.enableDisableScreen(enableDisable)
+    }
+
+    private fun handleGoogleClickListener() {
+        startOnBackGroundThread{
+            googleInstance = GoogleAuthenticationManager.getTheGoogleInstance()
+            isAlreadySessionHere = googleInstance?.checkWhetherUserHasAlreadyLoginTheAccount(MainActivity.getInstance())
+            if (isAlreadySessionHere == null) {
+                googleSignInLauncher.launch(googleInstance?.showTheGoogleSignInToUser(MainActivity.getInstance()))
+            } else {
+                startOnMainThread {
+                    requireContext().showCustomDialog(
+                        layoutInflater,
+                        isAlreadySessionHere?.email ?: getString(R.string.dummy_email),
+                        getString(R.string.change_account),
+                        getString(R.string.continue_with),
+                        ::continueWithThisAccount
+                    ) {
+                        googleInstance?.removeOrChangeGoogleAccount(requireActivity())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun continueWithThisAccount(){
+        isAlreadySessionHere?.email?.debugLogs(javaClass.simpleName)
+    }
+
+    /*
+    * Callbacks function
+    *
+    *
+    * */
+    private val googleSignInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data.toString().debugLogs(javaClass.simpleName)
+                result.data?.data?.userInfo?.debugLogs(javaClass.simpleName)
+            }
+        }
+
+
+
+    override fun onSuccessfulAuthorization(user: FirebaseUser?) {
+
+        "onSuccess ${user?.displayName}".debugLogs(javaClass.simpleName)
+        "onSuccess ${user?.email}".debugLogs(javaClass.simpleName)
+
+        enableDisableOperation(false)
+        SnackBarManager.getInstance().showSnackBar(
+            MainActivity.getBinding().root,
+            Snackbar.LENGTH_SHORT,
+            "your account is successfully registered."
+        ).toString()
+    }
+
+    override fun onFailedAuthorization(error: String) {
+        "onFailure $error".debugLogs(javaClass.simpleName)
+
+        SnackBarManager.getInstance()
+            .showSnackBar(MainActivity.getBinding().root, Snackbar.LENGTH_SHORT, error).toString()
+
+        enableDisableOperation(false)
+    }
+
+    override fun onAuthorizationCanceled() {
+        SnackBarManager.getInstance().showSnackBar(
+            MainActivity.getBinding().root,
+            Snackbar.LENGTH_SHORT,
+            "operation canceled"
+        ).toString()
+    }
+
+    override fun onAuthorizationComplete(task: Task<AuthResult>) {
+        "onAuth Complete $task".debugLogs(javaClass.simpleName)
+    }
+
 }

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "815449361012-e7li6dcd1e8d51esd3vqnccl55ros3at.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trishaft.fitwithus",
+            "certificate_hash": "e9d7b41e1b822417c177a7b18de20af42fe567eb"
+          }
+        },
+        {
           "client_id": "815449361012-u4d0kab8tftqnk81b3mkcrt5f64eejc7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

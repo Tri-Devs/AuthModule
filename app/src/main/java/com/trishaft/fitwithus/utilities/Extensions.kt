@@ -2,20 +2,28 @@ package com.trishaft.fitwithus.utilities
 
 import android.app.Dialog
 import android.content.Context
+import android.net.ConnectivityManager
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import com.trishaft.fitwithus.R
 import com.trishaft.fitwithus.databinding.CustomDialogEmailBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 fun String.debugLogs(tag: String) {
     Log.e(tag, "debugLogs: $this")
@@ -34,8 +42,13 @@ fun String.debugToast(context: Context, isLong: Boolean = false) {
 * @param --> String that need to be matched with the email address
 * @return --> return true if the string matches the Required format else return format.
 * */
-fun String.isValidEmail(): Boolean {
-    return Patterns.EMAIL_ADDRESS.matcher(this).matches()
+fun String.isValidEmail(onValidate:(Boolean)->Unit ={}): Boolean {
+    if(!Patterns.EMAIL_ADDRESS.matcher(this).matches()){
+        onValidate(false)
+        return false
+    }
+    onValidate(true)
+    return true
 }
 
 
@@ -52,9 +65,16 @@ fun String.isValidPassword(): Boolean {
 * @param --> takes the string that needs to be validate to number.
 * @return --> return true if mobile number is valid else return false.
 * */
-fun String.isValidMobileNumber(): Boolean {
-    return this.trim().length == 10
+fun String.isValidMobileNumber(onValidate:(Boolean)->Unit) {
+    if(this.trim().length != 10){
+        onValidate(false)
+        return
+    }
+    onValidate(true)
 }
+
+
+
 
 
 fun View.closeKeyboard() {
@@ -80,6 +100,7 @@ fun Fragment.navigate(action: Int) {
 }
 
 
+
 fun String.showDialog(context: Context) {
     val alertDialog = AlertDialog.Builder(context).apply {
         setCancelable(true)
@@ -101,7 +122,8 @@ fun Context.showCustomDialog(
     val binding = CustomDialogEmailBinding.inflate(layoutInflater)
     customDialog.setContentView(binding.root)
     binding.apply {
-        this@showCustomDialog.getString(R.string.do_you_want_to_go_with_this_email_id, emailAccount).also { emailString.text = it }
+        this@showCustomDialog.getString(R.string.do_you_want_to_go_with_this_email_id, emailAccount)
+            .also { emailString.text = it }
         positiveButton.text = positiveButtonName
         negativeButton.text = negativeButtonName
         cancelButton.setOnClickListener { customDialog.dismiss() }
@@ -110,3 +132,21 @@ fun Context.showCustomDialog(
     }
     customDialog.show()
 }
+
+fun Window.enableDisableScreen(enableDisable:Boolean){
+    if(enableDisable){
+        addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        return
+    }
+    clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+}
+
+fun ProgressBar.enableDisableScreen(enableDisable: Boolean){
+    if(enableDisable){
+        visibility = View.VISIBLE
+        return
+    }
+
+    visibility = View.GONE
+}
+

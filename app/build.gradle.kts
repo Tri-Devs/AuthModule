@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("androidx.navigation.safeargs")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -65,10 +67,13 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics:21.5.1")
     implementation("com.google.firebase:firebase-crashlytics:18.6.2")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.firebase:firebase-auth")
 
 
     /* implementation for the credential manager in android*/
     implementation ("com.google.android.gms:play-services-auth:21.0.0")
+
+    implementation ("androidx.browser:browser:1.3.0")
+
 
 }

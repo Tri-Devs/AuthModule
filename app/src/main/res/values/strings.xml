@@ -56,4 +56,7 @@
     <string name="no">No</string>
     <string name="change_account" tools:ignore="ExtraTranslation">Change Account</string>
     <string name="continue_with" tools:ignore="ExtraTranslation">Continue</string>
+    <string name="empty_email_msg">Please Enter Email Address.</string>
+    <string name="empty_pass">Please Enter the password.</string>
+    <string name="password_length">Password must be of atleast 6 character.</string>
 </resources>
