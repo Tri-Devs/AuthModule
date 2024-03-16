@@ -2,9 +2,11 @@ package com.trishaft.fitwithus.utilities
 
 object Constants {
 
+    const val PERF_NAME: String = "SHARED_PREF"
+
     /*
-    * Request codes
-    * */
+        * Request codes
+        * */
     const val KEY_GOOGLE_REQUEST_CODE: Int = 1001
 
     /*

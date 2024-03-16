@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class OTPArgs (
     val otpToken:String,
-    val resendToken:PhoneAuthProvider.ForceResendingToken
+    val resendToken:PhoneAuthProvider.ForceResendingToken,
+    val phoneNumber:String
 ):Parcelable

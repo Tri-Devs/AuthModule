@@ -3,8 +3,10 @@ package com.trishaft.fitwithus.screens.login
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.textfield.TextInputEditText
 import com.trishaft.fitwithus.AuthRepo
 import com.trishaft.fitwithus.communicators.AuthenticationCallback
+import com.trishaft.fitwithus.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -14,6 +16,7 @@ import kotlinx.coroutines.launch
 * */
 
 class LoginViewModel(application: Application) : AndroidViewModel(application){
+
     private lateinit var authRepo: AuthRepo
 
     init {

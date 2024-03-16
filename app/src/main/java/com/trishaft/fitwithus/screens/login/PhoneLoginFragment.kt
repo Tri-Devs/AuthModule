@@ -24,6 +24,8 @@ import com.trishaft.fitwithus.utilities.SnackBarManager
 import com.trishaft.fitwithus.utilities.closeKeyboard
 import com.trishaft.fitwithus.utilities.debugLogs
 import com.trishaft.fitwithus.utilities.enableDisableScreen
+import com.trishaft.fitwithus.utilities.enums.AuthExceptionStatus
+import com.trishaft.fitwithus.utilities.exception
 import com.trishaft.fitwithus.utilities.isValidMobileNumber
 import com.trishaft.fitwithus.utilities.navigate
 import com.trishaft.fitwithus.utilities.safe_args_modals.OTPArgs
@@ -113,7 +115,10 @@ class PhoneLoginFragment : Fragment(), IPhoneAuthenticatorCallbacks {
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "${po.message}"
+            po.exception(
+                requireContext(),
+                AuthExceptionStatus.OTP
+            )
         ).toString()
         po.printStackTrace()
     }
@@ -124,25 +129,33 @@ class PhoneLoginFragment : Fragment(), IPhoneAuthenticatorCallbacks {
     ) {
         "code Has been shared successfully $codeShared".debugLogs(javaClass.simpleName)
         enableDisableOperation(false)
+        SnackBarManager.getInstance().showSnackBar(
+            MainActivity.getBinding().root,
+            Snackbar.LENGTH_SHORT,
+            requireContext().getString(R.string.code_sent)
+        )
+        navigateToVerifyOtp(codeShared, resendToken)
+    }
 
+    private fun navigateToVerifyOtp(
+        codeShared: String,
+        resendToken: PhoneAuthProvider.ForceResendingToken
+    ) {
         findNavController().navigate(
             PhoneLoginFragmentDirections.actionPhoneLoginFragmentToOtpVerificationScreen(
                 OTPArgs(
                     codeShared,
-                    resendToken
+                    resendToken,
+                    binding.etMobile.text.toString()
                 )
             )
         )
     }
 
+
     override fun otpNotSharedSuccessFully() {
         "otp not shared for any reason".debugLogs(javaClass.simpleName)
         enableDisableOperation(false)
-        SnackBarManager.getInstance().showSnackBar(
-            MainActivity.getBinding().root,
-            Snackbar.LENGTH_SHORT,
-            "unable to send the otp.Please try after some time!!"
-        ).toString()
     }
 
     private fun enableDisableOperation(enableDisable: Boolean) {

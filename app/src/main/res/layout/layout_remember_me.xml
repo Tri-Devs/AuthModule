@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintTop_toBottomOf="@id/gTop"
+        app:layout_constraintEnd_toStartOf="@id/gEnd"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/ivSettings"
+        app:layout_constraintBottom_toTopOf="@id/gBottom"
+        app:layout_constraintStart_toEndOf="@id/gStart"
+        app:layout_constraintEnd_toStartOf="@id/gEnd">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivProfileContainer"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:src="@drawable/bg_remember_me_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="@dimen/_130sdp"
+                android:layout_height="@dimen/_130sdp"
+                android:src="@drawable/bg_remember_container"
+                android:elevation="1dp"
+                app:layout_constraintBottom_toBottomOf="@id/ivProfileContainer"
+                app:layout_constraintEnd_toEndOf="@id/ivProfileContainer"
+                app:layout_constraintStart_toStartOf="@id/ivProfileContainer"
+                app:layout_constraintTop_toTopOf="@id/ivProfileContainer"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvProfileName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dummy_name"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="@id/ivProfileContainer"
+                app:layout_constraintStart_toStartOf="@id/ivProfileContainer"
+                app:layout_constraintTop_toBottomOf="@id/ivProfileContainer"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/log_in"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:paddingVertical="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvProfileName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLoginAnother"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/log_in_another"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/white"
+                app:strokeColor="#1A000000"
+                app:strokeWidth="1dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:paddingVertical="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/btnLogin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMoreAcc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/more_acc"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/yellow_orange"
+                app:backgroundTint="@color/white"
+                app:strokeColor="@color/yellow_orange"
+                app:strokeWidth="1dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:paddingVertical="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/btnLoginAnother"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

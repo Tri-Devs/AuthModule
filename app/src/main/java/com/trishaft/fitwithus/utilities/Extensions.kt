@@ -2,7 +2,6 @@ package com.trishaft.fitwithus.utilities
 
 import android.app.Dialog
 import android.content.Context
-import android.net.ConnectivityManager
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -13,13 +12,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.trishaft.fitwithus.R
 import com.trishaft.fitwithus.databinding.CustomDialogEmailBinding
+import com.trishaft.fitwithus.utilities.enums.AuthExceptionStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -148,5 +149,31 @@ fun ProgressBar.enableDisableScreen(enableDisable: Boolean){
     }
 
     visibility = View.GONE
+}
+
+
+fun Exception.exception(context: Context,authStatus:AuthExceptionStatus):String{
+    if(this is FirebaseNetworkException){
+        return context.getString(R.string.no_internet_connection)
+    }
+
+    if(this is FirebaseAuthInvalidCredentialsException){
+
+        if(authStatus == AuthExceptionStatus.OTP)
+            return context.getString(R.string.invalid_otp)
+
+        if(authStatus == AuthExceptionStatus.LOGIN)
+            return context.getString(R.string.invalid_credentials)
+    }
+
+    if(this is FirebaseAuthInvalidUserException){
+        return context.getString(R.string.invalid_user)
+    }
+
+    if(this is FirebaseAuthUserCollisionException){
+        return context.getString(R.string.email_already_used)
+    }
+
+    return context.getString(R.string.something_went_wrong)
 }
 

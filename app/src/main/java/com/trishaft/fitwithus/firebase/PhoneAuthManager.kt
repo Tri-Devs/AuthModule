@@ -72,7 +72,6 @@ class PhoneAuthManager {
 
         override fun onVerificationFailed(p0: FirebaseException) {
             p0.message?.debugLogs(javaClass.simpleName)
-
             listener?.onPhoneVerificationCancelled(p0)
         }
 
@@ -98,7 +97,7 @@ class PhoneAuthManager {
             }
             .addOnSuccessListener { listener.onSuccessfulAuthorization(it.user) }
             .addOnFailureListener {
-                listener.onFailedAuthorization(it.message.toString())
+                listener.onFailedAuthorization(it)
                 it.printStackTrace()
             }
             .addOnCanceledListener { listener.onAuthorizationCanceled() }

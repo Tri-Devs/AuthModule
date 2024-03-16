@@ -1,9 +1,13 @@
 package com.trishaft.fitwithus.activities
 
 import android.app.Activity
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.Log
 import com.trishaft.fitwithus.databinding.ActivityMainBinding
+import com.trishaft.fitwithus.screens.login.LoginFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
 
     }
+
 
     companion object{
         private lateinit var instance:Activity

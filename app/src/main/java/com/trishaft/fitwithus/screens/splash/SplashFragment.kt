@@ -12,9 +12,11 @@ import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.trishaft.fitwithus.R
 import com.trishaft.fitwithus.databinding.FragmentLoginBinding
 import com.trishaft.fitwithus.databinding.FragmentSplashBinding
+import com.trishaft.fitwithus.utilities.PrefManager
 import com.trishaft.fitwithus.utilities.navigate
 
 
@@ -61,7 +63,10 @@ class SplashFragment : Fragment() {
         animatorSet.start()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            navigate(R.id.action_splashFragment_to_loginFragment)
+            if(PrefManager.getInstance(requireContext()).getProfile().isEmpty())
+                navigate(R.id.action_splashFragment_to_loginFragment)
+            else
+                navigate(R.id.action_splashFragment_to_rememberMeFragment)
         }, 2100)
     }
 

@@ -3,9 +3,6 @@ package com.trishaft.fitwithus.firebase
 import com.trishaft.fitwithus.communicators.AuthenticationCallback
 import com.trishaft.fitwithus.utilities.FitWithUsApplication
 import com.trishaft.fitwithus.utilities.debugLogs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class EmailAuthenticationManager {
 
@@ -30,9 +27,7 @@ class EmailAuthenticationManager {
             .createUserWithEmailAndPassword(email, password)
             .addOnFailureListener {
                 "onFailureCallback while signUp ${it.message}".debugLogs(MAIN_LOGGER)
-                listener.onFailedAuthorization(
-                    it.message ?: "failed to fetch the exception message"
-                )
+                listener.onFailedAuthorization(it)
                 it.printStackTrace()
             }
             .addOnSuccessListener {
@@ -48,9 +43,8 @@ class EmailAuthenticationManager {
                     "onCompleteListener while signup with task unsuccessful ".debugLogs(
                         MAIN_LOGGER
                     )
-                    listener.onFailedAuthorization(
-                        task.exception?.message ?: "failed to fetch the message"
-                    )
+                    task.exception?.let { listener.onFailedAuthorization(it) }
+
                     task.exception?.printStackTrace()
                     return@addOnCompleteListener
                 }
@@ -69,15 +63,15 @@ class EmailAuthenticationManager {
         password: String,
         listener: AuthenticationCallback
     ) {
-        "$email".debugLogs("logger")
-        "$password".debugLogs("logger")
+        email.debugLogs("logger")
+        password.debugLogs("logger")
 
         FitWithUsApplication.getFirebaseAuthInstance()
             .signInWithEmailAndPassword(email, password)
             .addOnFailureListener {
                 "onFailureCallback while signIn ${it.message}".debugLogs(MAIN_LOGGER)
                 listener.onFailedAuthorization(
-                    it.message ?: "failed to fetch the exception message"
+                    it
                 )
                 it.printStackTrace()
             }
@@ -94,9 +88,11 @@ class EmailAuthenticationManager {
                     "onCompleteListener while signIn with task unsuccessful ".debugLogs(
                         MAIN_LOGGER
                     )
-                    listener.onFailedAuthorization(
-                        task.exception?.message ?: "failed to fetch the message"
-                    )
+                    task.exception?.let {
+                        listener.onFailedAuthorization(
+                            it
+                        )
+                    }
                     task.exception?.printStackTrace()
                     return@addOnCompleteListener
                 }

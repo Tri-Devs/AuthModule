@@ -21,38 +21,40 @@ import com.trishaft.fitwithus.activities.MainActivity
 import com.trishaft.fitwithus.communicators.AuthenticationCallback
 import com.trishaft.fitwithus.communicators.IPhoneAuthenticatorCallbacks
 import com.trishaft.fitwithus.databinding.FragmentOtpVerificationScreenBinding
-import com.trishaft.fitwithus.firebase.PhoneAuthManager
 import com.trishaft.fitwithus.otpReader.IOtpReader
 import com.trishaft.fitwithus.screens.signUp.performSingleClick
-import com.trishaft.fitwithus.utilities.FitWithUsApplication
 import com.trishaft.fitwithus.utilities.SnackBarManager
+import com.trishaft.fitwithus.utilities.closeKeyboard
 import com.trishaft.fitwithus.utilities.debugLogs
 import com.trishaft.fitwithus.utilities.enableDisableScreen
+import com.trishaft.fitwithus.utilities.enums.AuthExceptionStatus
+import com.trishaft.fitwithus.utilities.exception
 import com.trishaft.fitwithus.utilities.navigate
 import com.trishaft.fitwithus.utilities.safe_args_modals.OTPArgs
 
 
-class OtpVerificationScreen : Fragment() , IOtpReader, AuthenticationCallback{
+class OtpVerificationScreen : Fragment(), IOtpReader, AuthenticationCallback {
 
-    private val binding : FragmentOtpVerificationScreenBinding by lazy {
+    private val binding: FragmentOtpVerificationScreenBinding by lazy {
         FragmentOtpVerificationScreenBinding.inflate(layoutInflater)
     }
 
-    private val otpVerificationViewModel:OtpVerificationViewModel by lazy{
+    private val otpVerificationViewModel: OtpVerificationViewModel by lazy {
         ViewModelProvider(this)[OtpVerificationViewModel::class.java]
     }
 
-    private val handler:Handler by lazy{
+    private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
 
-    private var args:OtpVerificationScreenArgs?= null
+    private var args: OtpVerificationScreenArgs? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-         args = OtpVerificationScreenArgs.fromBundle(requireArguments())
+        args = OtpVerificationScreenArgs.fromBundle(requireArguments())
         "${args?.otpToken?.otpToken}".debugLogs(javaClass.simpleName)
         "${args?.otpToken?.resendToken}".debugLogs(javaClass.simpleName)
+        "${args?.otpToken?.phoneNumber}".debugLogs(javaClass.simpleName)
 
     }
 
@@ -66,19 +68,30 @@ class OtpVerificationScreen : Fragment() , IOtpReader, AuthenticationCallback{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.otpReader.registerCallbacks(this)
+        initPhoneNumber()
         setUpClickListeners()
+    }
+
+    /**
+     *  function to the number
+     */
+    private fun initPhoneNumber() {
+        binding.userNumber.text = buildString {
+            append(requireContext().getString(R.string.phone_code))
+            append(args?.otpToken?.phoneNumber)
+        }
     }
 
     private fun setUpClickListeners() {
         binding.apply {
             backButton.setOnClickListener { navigate(R.id.action_otpVerificationScreen_to_phoneLoginFragment) }
-            tryMoreMethods.setOnClickListener { navigate(R.id.action_otpVerificationScreen_to_loginFragment)}
+            tryMoreMethods.setOnClickListener { navigate(R.id.action_otpVerificationScreen_to_loginFragment) }
             notReceiveOtp.setOnClickListener { resendOtp() }
         }
     }
 
     private fun resendOtp() {
-        binding.notReceiveOtp.performSingleClick(handler){
+        binding.notReceiveOtp.performSingleClick(handler) {
             args?.otpToken?.let {
                 enableDisableOperation(true)
                 performResendTokenOperation(it)
@@ -86,16 +99,23 @@ class OtpVerificationScreen : Fragment() , IOtpReader, AuthenticationCallback{
         }
     }
 
-    private fun performResendTokenOperation(args:OTPArgs) {
-        otpVerificationViewModel.getResendToken("8837689705", requireActivity(),
-            args.resendToken,  object : IPhoneAuthenticatorCallbacks{
+    private fun performResendTokenOperation(args: OTPArgs) {
+        otpVerificationViewModel.getResendToken(args.phoneNumber, requireActivity(),
+            args.resendToken, object : IPhoneAuthenticatorCallbacks {
                 override fun onPhoneVerificationDone(credentials: PhoneAuthCredential) {
-                    Log.d("resendLogger","first ")
                 }
 
                 override fun onPhoneVerificationCancelled(po: FirebaseException) {
                     enableDisableOperation(false)
-                    Log.d("resendLogger","second ")
+                    SnackBarManager.getInstance().showSnackBar(
+                        MainActivity.getBinding().root,
+                        Snackbar.LENGTH_SHORT,
+                        po.exception(
+                            requireContext(),
+                            AuthExceptionStatus.OTP
+                        )
+                    ).toString()
+                    po.printStackTrace()
                 }
 
                 override fun phoneOtpSharedSuccessFully(
@@ -103,12 +123,15 @@ class OtpVerificationScreen : Fragment() , IOtpReader, AuthenticationCallback{
                     resendToken: PhoneAuthProvider.ForceResendingToken
                 ) {
                     enableDisableOperation(false)
-                    Log.d("resendLogger","third ")
+                    SnackBarManager.getInstance().showSnackBar(
+                        MainActivity.getBinding().root,
+                        Snackbar.LENGTH_SHORT,
+                        requireContext().getString(R.string.code_sent)
+                    ).toString()
                 }
 
                 override fun otpNotSharedSuccessFully() {
                     enableDisableOperation(false)
-                    Log.d("resendLogger","four ")
                 }
 
             })
@@ -126,6 +149,7 @@ class OtpVerificationScreen : Fragment() , IOtpReader, AuthenticationCallback{
     override fun verifyOtp(otp: String) {
         "userEnteredOtp $otp".debugLogs(javaClass.simpleName)
         args?.otpToken?.otpToken?.let {
+            binding.root.closeKeyboard()
             enableDisableOperation(true)
             otpVerificationViewModel.verifyOtp(otp, it, this)
         }
@@ -143,18 +167,20 @@ class OtpVerificationScreen : Fragment() , IOtpReader, AuthenticationCallback{
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "your account is successfully registered."
+            requireContext().getString(R.string.success_sign_up)
         ).toString()
 
     }
 
-    override fun onFailedAuthorization(error: String) {
+    override fun onFailedAuthorization(error: Exception) {
         enableDisableOperation(false)
         "onFailedAuthorization callback".debugLogs(javaClass.name)
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "Please add the correct otp."
+            error.exception(
+                requireContext(), AuthExceptionStatus.OTP
+            )
         ).toString()
     }
 

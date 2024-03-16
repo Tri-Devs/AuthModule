@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -25,7 +24,6 @@ import com.trishaft.fitwithus.communicators.AuthenticationCallback
 import com.trishaft.fitwithus.databinding.FragmentForgotBottomSheetBinding
 import com.trishaft.fitwithus.databinding.FragmentLoginBinding
 import com.trishaft.fitwithus.firebase.GoogleAuthenticationManager
-import com.trishaft.fitwithus.screens.signUp.SignUpFragment
 import com.trishaft.fitwithus.screens.signUp.performSingleClick
 import com.trishaft.fitwithus.screens.signUp.toggleState
 import com.trishaft.fitwithus.screens.signUp.validate
@@ -35,6 +33,8 @@ import com.trishaft.fitwithus.utilities.SnackBarManager
 import com.trishaft.fitwithus.utilities.closeKeyboard
 import com.trishaft.fitwithus.utilities.debugLogs
 import com.trishaft.fitwithus.utilities.enableDisableScreen
+import com.trishaft.fitwithus.utilities.enums.AuthExceptionStatus
+import com.trishaft.fitwithus.utilities.exception
 import com.trishaft.fitwithus.utilities.isValidEmail
 import com.trishaft.fitwithus.utilities.isValidMobileNumber
 import com.trishaft.fitwithus.utilities.navigate
@@ -45,7 +45,7 @@ import com.trishaft.fitwithus.utilities.startOnMainThread
 
 class LoginFragment : Fragment() , AuthenticationCallback{
 
-    private val binding: FragmentLoginBinding by lazy {
+     val binding: FragmentLoginBinding by lazy {
         FragmentLoginBinding.inflate(layoutInflater)
     }
 
@@ -193,6 +193,10 @@ class LoginFragment : Fragment() , AuthenticationCallback{
                 instance ?: LoginFragment().also { instance = it }
             }
         }
+
+        fun getText():String{
+            return instance?.binding?.etEmail?.text.toString()
+        }
     }
 
 
@@ -316,14 +320,16 @@ class LoginFragment : Fragment() , AuthenticationCallback{
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "Login Successful"
+            requireContext().getString(R.string.success_login)
         ).toString()
     }
 
-    override fun onFailedAuthorization(error: String) {
+    override fun onFailedAuthorization(error: Exception) {
         "onFailure $error".debugLogs(javaClass.name)
         SnackBarManager.getInstance()
-            .showSnackBar(MainActivity.getBinding().root, Snackbar.LENGTH_SHORT, error).toString()
+            .showSnackBar(MainActivity.getBinding().root, Snackbar.LENGTH_SHORT, error.exception(
+                requireContext(), AuthExceptionStatus.LOGIN
+            )).toString()
         enableDisableOperation(false)
     }
 
@@ -331,7 +337,7 @@ class LoginFragment : Fragment() , AuthenticationCallback{
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "operation canceled"
+            requireContext().getString(R.string.op_cancel)
         ).toString()
     }
 

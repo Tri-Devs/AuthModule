@@ -172,6 +172,7 @@
             android:fontFamily="@font/poppins_bold"
             android:paddingVertical="@dimen/_10sdp"
             android:alpha="0.5"
+            android:enabled="false"
             android:textColor="@color/white"
             android:text="@string/signUp"
             android:textSize="@dimen/_11ssp"

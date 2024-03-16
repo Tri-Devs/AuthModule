@@ -23,9 +23,14 @@ import com.trishaft.fitwithus.activities.MainActivity
 import com.trishaft.fitwithus.communicators.AuthenticationCallback
 import com.trishaft.fitwithus.databinding.FragmentSignUpBinding
 import com.trishaft.fitwithus.firebase.GoogleAuthenticationManager
+import com.trishaft.fitwithus.screens.remember_me.RememberMeModal
+import com.trishaft.fitwithus.utilities.PrefManager
 import com.trishaft.fitwithus.utilities.SnackBarManager
+import com.trishaft.fitwithus.utilities.closeKeyboard
 import com.trishaft.fitwithus.utilities.debugLogs
 import com.trishaft.fitwithus.utilities.enableDisableScreen
+import com.trishaft.fitwithus.utilities.enums.AuthExceptionStatus
+import com.trishaft.fitwithus.utilities.exception
 import com.trishaft.fitwithus.utilities.navigate
 import com.trishaft.fitwithus.utilities.showCustomDialog
 import com.trishaft.fitwithus.utilities.startOnBackGroundThread
@@ -83,18 +88,12 @@ class SignUpFragment : Fragment(), AuthenticationCallback {
 
     private fun setListeners() {
         binding.apply {
-            btnSignUp.setOnClickListener { performSignUp() }
+            btnSignUp.setOnClickListener { root.closeKeyboard(); performSignUp() }
             btnGoogle.setOnClickListener { performGoogleSignIn() }
             btnMobile.setOnClickListener { performPhoneAuthentication() }
             signUpNavigation.setOnClickListener { navigate(R.id.action_signUpFragment_to_loginFragment) }
-            rememberMe.setOnCheckedChangeListener { compoundButton, switchState ->
-                saveLastLoginProfile(compoundButton, switchState)
-            }
+
         }
-    }
-
-    private fun saveLastLoginProfile(compoundButton: CompoundButton?, switchState: Boolean) {
-
     }
 
     private fun performPhoneAuthentication() {
@@ -182,15 +181,26 @@ class SignUpFragment : Fragment(), AuthenticationCallback {
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "your account is successfully registered."
+            requireContext().getString(R.string.success_sign_up)
         ).toString()
+
+        saveProfile(user)
     }
 
-    override fun onFailedAuthorization(error: String) {
+    private fun saveProfile(user: FirebaseUser?) {
+        if(!binding.rememberMe.isChecked)
+            return
+        PrefManager.getInstance(requireContext()).saveProfile(RememberMeModal(binding.etEmail.text?.trim().toString(),
+            binding.etPassword.text?.trim().toString()))
+    }
+
+    override fun onFailedAuthorization(error: Exception) {
         "onFailure $error".debugLogs(javaClass.simpleName)
 
         SnackBarManager.getInstance()
-            .showSnackBar(MainActivity.getBinding().root, Snackbar.LENGTH_SHORT, error).toString()
+            .showSnackBar(MainActivity.getBinding().root, Snackbar.LENGTH_SHORT, error.exception(
+                requireContext(), AuthExceptionStatus.SIGN_UP
+            )).toString()
 
         enableDisableOperation(false)
     }
@@ -199,7 +209,7 @@ class SignUpFragment : Fragment(), AuthenticationCallback {
         SnackBarManager.getInstance().showSnackBar(
             MainActivity.getBinding().root,
             Snackbar.LENGTH_SHORT,
-            "operation canceled"
+            requireContext().getString(R.string.op_cancel)
         ).toString()
     }
 
