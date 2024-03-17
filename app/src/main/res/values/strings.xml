@@ -38,7 +38,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="change_password">Change Password</string>
     <string name="mobile_verification">Mobile Verification</string>
-    <string name="not_close">Please don\'t press the back button or close the app.</string>
+    <string name="not_close">Password reset email will be shared on your entered Mail.</string>
     <string name="signUp">Sign Up</string>
     <string name="create_account">Create Account</string>
     <string name="first_name">Name</string>
@@ -62,4 +62,5 @@
     <string name="otp_for_password_change">Otp For Password Change for FitWithUs</string>
     <string name="hi_your_otp_is_for_this_session">Hi %1$s , your Otp is %2$s for this session once the session end you need to generate the new otp. here session refer until you close the app.</string>
     <string name="wait_for_20_second_resend_otp">Wait for %1$s second? Resend OTP</string>
+    <string name="share_email">Share Email</string>
 </resources>

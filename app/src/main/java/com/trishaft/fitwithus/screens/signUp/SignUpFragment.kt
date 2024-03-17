@@ -23,6 +23,7 @@ import com.trishaft.fitwithus.activities.MainActivity
 import com.trishaft.fitwithus.communicators.AuthenticationCallback
 import com.trishaft.fitwithus.databinding.FragmentSignUpBinding
 import com.trishaft.fitwithus.firebase.GoogleAuthenticationManager
+import com.trishaft.fitwithus.utilities.Constants
 import com.trishaft.fitwithus.utilities.SnackBarManager
 import com.trishaft.fitwithus.utilities.debugLogs
 import com.trishaft.fitwithus.utilities.enableDisableScreen
@@ -52,15 +53,16 @@ class SignUpFragment : Fragment(), AuthenticationCallback {
         savedInstanceState: Bundle?
     ): View {
 
-        // Inflate the layout for this fragment
-        "onCreateView callback".debugLogs(javaClass.simpleName)
-        handler = Handler(Looper.getMainLooper())
+       if(savedInstanceState != null){
+           binding.etEmail.setText(savedInstanceState.getString(Constants.USER_EMAIL))
+           binding.etPassword.setText(savedInstanceState.getString(Constants.USER_PASSWORD))
+       }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        "onViewCreated callback".debugLogs(javaClass.simpleName)
+        handler = Handler(Looper.getMainLooper())
         setTextChangedListeners()
         setListeners()
     }
@@ -124,6 +126,12 @@ class SignUpFragment : Fragment(), AuthenticationCallback {
             binding.etEmail.text?.trim().toString(),
             binding.etPassword.text?.trim().toString(), this
         )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(Constants.USER_EMAIL, binding.etEmail.text.toString())
+        outState.putString(Constants.USER_PASSWORD, binding.etPassword.text.toString())
     }
 
     private fun enableDisableOperation(enableDisable: Boolean) {

@@ -256,7 +256,7 @@
         android:backgroundTint="@color/yellow_orange"
         android:fontFamily="@font/poppins_bold"
         android:paddingVertical="@dimen/_10sdp"
-        android:text="@string/send_otp"
+        android:text="@string/share_email"
         android:alpha="0.5"
         android:textColor="@color/white"
         android:textSize="@dimen/_11ssp"

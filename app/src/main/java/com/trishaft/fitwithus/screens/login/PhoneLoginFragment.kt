@@ -20,6 +20,7 @@ import com.trishaft.fitwithus.communicators.IPhoneAuthenticatorCallbacks
 import com.trishaft.fitwithus.databinding.FragmentPhoneLoginBinding
 import com.trishaft.fitwithus.screens.signUp.performSingleClick
 import com.trishaft.fitwithus.screens.signUp.toggleState
+import com.trishaft.fitwithus.utilities.Constants
 import com.trishaft.fitwithus.utilities.SnackBarManager
 import com.trishaft.fitwithus.utilities.closeKeyboard
 import com.trishaft.fitwithus.utilities.debugLogs
@@ -48,14 +49,21 @@ class PhoneLoginFragment : Fragment(), IPhoneAuthenticatorCallbacks {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        "onCreateView callback".debugLogs(javaClass.simpleName)
+
+        if(savedInstanceState != null){
+            binding.tvMobileNumber.text = savedInstanceState.getString(Constants.USER_MOBILE_NUMBER)
+        }
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(Constants.USER_MOBILE_NUMBER , binding.etMobile.text.toString())
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        "onViewCreated callback".debugLogs(javaClass.simpleName)
         setUpClickListeners()
         setUpTextChangedListener()
     }

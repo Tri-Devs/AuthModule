@@ -1,10 +1,12 @@
 package com.trishaft.fitwithus.screens.login
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.trishaft.fitwithus.AuthRepo
 import com.trishaft.fitwithus.communicators.AuthenticationCallback
+import com.trishaft.fitwithus.communicators.IGlobalCallbacks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -29,5 +31,13 @@ class LoginViewModel(application: Application) : AndroidViewModel(application){
             authRepo.doEmailSignIn(email,password,listener)
         }
     }
+
+    fun sendMailForPasswordReset(email : String , context: IGlobalCallbacks){
+        viewModelScope.launch(Dispatchers.IO) {
+            authRepo.shareMailForPasswordReset(email ,context)
+        }
+
+    }
+
 
 }
